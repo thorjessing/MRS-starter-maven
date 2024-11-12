@@ -12,16 +12,27 @@ public class MovieManager {
     private IMovieDataAccess movieDAO;
 
     public MovieManager() {
-        movieDAO = new MovieDAO_Mock();
+        //movieDAO = new MovieDAO_Mock();
+        movieDAO = new MovieDAO_File();
+        //movieDAO = new MovieDAO_DB();
     }
 
     public List<Movie> getAllMovies() throws Exception {
         return movieDAO.getAllMovies();
     }
 
+
+
+
+
     public List<Movie> searchMovies(String query) throws Exception {
         List<Movie> allMovies = getAllMovies();
         List<Movie> searchResult = movieSearcher.search(allMovies, query);
         return searchResult;
+    }
+
+
+    public Movie createMovie(Movie newMovie) throws Exception {
+        return movieDAO.createMovie(newMovie);
     }
 }

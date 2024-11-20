@@ -5,9 +5,9 @@ import dk.easv.mrs.GUI.Model.MovieModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -20,6 +20,16 @@ public class MovieViewController implements Initializable {
 
     @FXML
     private TextField txtTitle, txtYear;
+
+
+    @FXML
+    private TableView<Movie> tblMovies;
+
+    @FXML
+    private TableColumn<Movie, String> colTitle;
+
+    @FXML
+    private TableColumn<Movie, Integer> colYear;
 
     public MovieViewController()  {
 
@@ -35,7 +45,32 @@ public class MovieViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
     {
+        colTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
+        colYear.setCellValueFactory(new PropertyValueFactory<>("year"));
+
+        tblMovies.setItems(movieModel.getObservableMovies());
         lstMovies.setItems(movieModel.getObservableMovies());
+
+        tblMovies.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldValue, newValue) ->
+                {
+                    //lambda udtryk
+                    //System.out.println(newValue);
+                    if (newValue != null){
+                    txtTitle.setText(newValue.getTitle());
+                    txtYear.setText(newValue.getYear() + "");
+
+                }
+                else
+        {
+            txtTitle.setText("");
+            txtYear.setText("");
+
+        }
+        });
+
+
+
 
         txtMovieSearch.textProperty().addListener((observableValue, oldValue, newValue) -> {
             try {
